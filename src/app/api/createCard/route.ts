@@ -1,22 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
+import { uploadToS3 } from "../../../utils/s3";
 import { db } from "../../../db/drizzle";
 import { pokemonCards } from "../../../db/schema";
 
 export async function POST(req: NextRequest) {
   try {
-    const { set_number, name, image_url } = await req.json();
+    const { name, set_number, imageFile } = await req.json();
 
-    if (!set_number || !name || !image_url) {
+    if (!name || set_number || !imageFile) {
       return NextResponse.json(
-        { message: "All fields are required (set_number, name, image_url)" },
+        { message: "All fields are required: (set_number, name, imageFile)" },
         { status: 400 }
       );
     }
 
+    const imageFileBuffer = Buffer.from(imageFile.data, "base64");
+    const imageFileName = `images/${set_number}.jpg`;
+
+    await uploadToS3(imageFileName, imageFileBuffer, "image/jpeg");
+
     const newCard = await db.insert(pokemonCards).values({
-      set_number,
       name,
-      image_url,
+      set_number,
+      image_url: `https://pokecards-ketchum.s3.amazonaws.com/${imageFileName}`,
     });
 
     return NextResponse.json(newCard, { status: 201 });
