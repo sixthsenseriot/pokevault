@@ -76,7 +76,7 @@ const UploadForm = () => {
           <input
             type="file"
             accept="image/*"
-            onChange={(e) => setImageFile(e.target.files?.[0] || null)}
+            onChange={(e) => setImageFile(e.target.files?.[0] ?? null)}
             required
           />
         </div>
