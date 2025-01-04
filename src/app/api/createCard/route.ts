@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
   try {
     const { name, set_number, imageFile } = await req.json();
 
-    if (!name || set_number || !imageFile) {
+    if (!name || !set_number || !imageFile) {
       return NextResponse.json(
         { message: "All fields are required: (set_number, name, imageFile)" },
         { status: 400 }
