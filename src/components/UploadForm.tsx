@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 
 const UploadForm = () => {
   const [name, setName] = useState("");
@@ -80,7 +81,7 @@ const UploadForm = () => {
             required
           />
         </div>
-        <button type="submit">Upload</button>
+        <Button type="submit">Upload</Button>
       </form>
       {message && <p>{message}</p>}
     </div>
